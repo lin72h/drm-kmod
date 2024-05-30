@@ -3,30 +3,39 @@
 SYSDIR?=/usr/src/sys
 .include "${SYSDIR}/conf/kern.opts.mk"
 
-_VALID_KMODS=	dmabuf ttm drm dummygfx i915 amd radeon linuxkpi_video
+# _VALID_KMODS=	dmabuf ttm drm dummygfx i915 amd radeon linuxkpi_video
+ _VALID_KMODS=	dmabuf ttm drm dummygfx amd linuxkpi_video
 
-SUPPORTED_ARCH=	amd64 \
-		i386 \
-		aarch64 \
-		powerpc64 \
-		powerpc64le \
-		riscv64 \
-		riscv64sf
+# SUPPORTED_ARCH=	amd64 \
+# 		i386 \
+# 		aarch64 \
+# 		powerpc64 \
+# 		powerpc64le \
+# 		riscv64 \
+# 		riscv64sf
 
-.if empty(SUPPORTED_ARCH:M${MACHINE_ARCH})
-.error "Unsupported architetures ${MACHINE_ARCH}"
-.endif
+SUPPORTED_ARCH=	amd64
+
+# .if empty(SUPPORTED_ARCH:M${MACHINE_ARCH})
+# .error "Unsupported architetures ${MACHINE_ARCH}"
+# .endif
+
+# DEFAULT_KMODS=	dmabuf		\
+# 		ttm		\
+# 		drm		\
+# 		linuxkpi_video	\
+# 		amd		\
+# 		radeon
 
 DEFAULT_KMODS=	dmabuf		\
 		ttm		\
 		drm		\
 		linuxkpi_video	\
-		amd		\
-		radeon
+		amd		
 
-.if ${MACHINE_ARCH} == "amd64" || ${MACHINE_ARCH} == "i386"
-DEFAULT_KMODS+=	i915
-.endif
+# .if ${MACHINE_ARCH} == "amd64" || ${MACHINE_ARCH} == "i386"
+# DEFAULT_KMODS+=	i915
+# .endif
 
 .if defined(DUMMYGFX)
 _dummygfx = dummygfx
@@ -44,20 +53,20 @@ afterinstall: .PHONY
 
 KMODS?=	${DEFAULT_KMODS}
 
-.for var in ${KMODS}
-.if empty(_VALID_KMODS:M${var})
-_INVALID_KMODS+=	${var}
-.endif
-.if empty(DEFAULT_KMODS:M${var})
-_INVALID_ARCH_KMODS+=	${var}
-.endif
-.endfor
-.if !empty(_INVALID_KMODS)
-.error "Unknown drm kmod ${_INVALID_KMODS}"
-.endif
-.if !empty(_INVALID_ARCH_KMODS)
-.error "${_INVALID_ARCH_KMODS} aren't supported on this architecture"
-.endif
+# .for var in ${KMODS}
+# .if empty(_VALID_KMODS:M${var})
+# _INVALID_KMODS+=	${var}
+# .endif
+# .if empty(DEFAULT_KMODS:M${var})
+# _INVALID_ARCH_KMODS+=	${var}
+# .endif
+# .endfor
+# .if !empty(_INVALID_KMODS)
+# .error "Unknown drm kmod ${_INVALID_KMODS}"
+# .endif
+# .if !empty(_INVALID_ARCH_KMODS)
+# .error "${_INVALID_ARCH_KMODS} aren't supported on this architecture"
+# .endif
 
 SUBDIR=	${KMODS}
 

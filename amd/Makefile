@@ -1,11 +1,14 @@
 # $FreeBSD$
 
+# AMDGPU_ARCH=	amd64 \
+# 		aarch64 \
+# 		powerpc64 \
+# 		powerpc64le \
+# 		riscv64 \
+# 		riscv64sf
+#
+
 AMDGPU_ARCH=	amd64 \
-		aarch64 \
-		powerpc64 \
-		powerpc64le \
-		riscv64 \
-		riscv64sf
 
 .if !empty(AMDGPU_ARCH:M${MACHINE_ARCH})
 _amdgpu=	amdgpu
